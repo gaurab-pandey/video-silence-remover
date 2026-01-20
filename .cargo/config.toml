@@ -1,0 +1,13 @@
+[build]
+# Reduce parallel compilation to avoid memory issues
+jobs = 1
+
+# Increase stack size for Windows builds
+[target.x86_64-pc-windows-msvc]
+rustflags = ["-C", "link-arg=-stack:8388608"]
+
+[profile.dev]
+# Disable incremental compilation which can cause corruption
+incremental = false
+# Reduce optimization to speed up compilation
+opt-level = 0

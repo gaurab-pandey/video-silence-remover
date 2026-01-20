@@ -1,0 +1,214 @@
+﻿<!doctype html>
+<html lang="en" class="dark">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Segment Review Tool</title>
+  <script type="module" src="/src/main.ts" defer></script>
+</head>
+
+<body class="overflow-hidden">
+  <!-- Segment Review Tool Layout -->
+  <div class="flex flex-col h-screen bg-[#1a1a1a]">
+
+    <!-- Top App Bar -->
+    <div class="app-bar">
+      <span class="app-bar-title">Segment Review Tool</span>
+      <div class="flex items-center gap-1.5">
+        <button id="import-btn" class="toolbar-btn-primary">
+          <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+          </svg>
+          Import
+        </button>
+        <button id="export-btn" class="toolbar-btn-primary" disabled>
+          <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" />
+          </svg>
+          Export
+        </button>
+      </div>
+    </div>
+
+    <!-- Main Content Area -->
+    <div class="flex flex-1 overflow-hidden">
+
+      <!-- LEFT: Analysis Settings Panel -->
+      <div class="panel w-56 flex flex-col border-r border-[#2D2D2D]">
+        <div class="p-3 border-b border-[#2D2D2D]">
+          <h2 class="text-xs font-semibold text-[#E0E0E0] uppercase tracking-wide">Analysis Settings</h2>
+        </div>
+
+        <div class="panel-content space-y-4 p-4 flex-1 overflow-y-auto">
+          <!-- Video Info -->
+          <div id="video-info" class="control-section" style="display: none;">
+            <div class="text-[10px] text-[#9A9A9A] mb-2 uppercase tracking-wide">Video Info</div>
+            <div class="info-list space-y-1">
+              <p id="video-path-display" class="info-item text-xs text-[#E0E0E0] truncate"></p>
+              <p id="video-duration-display" class="info-item text-xs text-[#9A9A9A]"></p>
+              <p id="video-count-display" class="info-item text-xs text-[#9A9A9A]"></p>
+            </div>
+            <div class="h-px bg-[#2D2D2D] my-3"></div>
+          </div>
+
+          <!-- Detection Settings -->
+          <div class="control-section">
+            <div class="text-[10px] text-[#9A9A9A] mb-2 uppercase tracking-wide">Detection</div>
+            <div class="space-y-3">
+              <div>
+                <div class="control-label">
+                  <span>Threshold</span>
+                  <span id="threshold-value" class="control-value">-35 dB</span>
+                </div>
+                <input type="range" id="threshold-input" class="slider" value="-35" min="-60" max="0" step="1" />
+              </div>
+              <div>
+                <div class="control-label">
+                  <span>Min Duration</span>
+                  <span id="duration-value" class="control-value">0.3 s</span>
+                </div>
+                <input type="range" id="duration-input" class="slider" value="0.3" min="0.1" max="5" step="0.1" />
+              </div>
+            </div>
+          </div>
+
+          <!-- Editing Feel Settings -->
+          <div class="control-section">
+            <div class="text-[10px] text-[#9A9A9A] mb-2 uppercase tracking-wide">Editing Feel</div>
+            <div class="space-y-3">
+              <div>
+                <div class="control-label">
+                  <span>Cut Softness</span>
+                  <span id="softness-value" class="control-value">20%</span>
+                </div>
+                <input type="range" id="softness-input" class="slider" value="20" min="0" max="40" step="1"
+                  title="Preserves a portion of each pause based on its length to prevent abrupt cuts." />
+                <div class="flex justify-between mt-1 text-[9px] text-[#666]">
+                  <span>Hard cuts</span>
+                  <span>Smooth cuts</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Re-run Analysis Button -->
+          <button id="rerun-analysis-btn" class="toolbar-btn w-full justify-center" disabled>
+            <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+            </svg>
+            Re-run Analysis
+          </button>
+
+          <!-- Export Duration Info -->
+          <div id="export-info" class="control-section" style="display: none;">
+            <div class="h-px bg-[#2D2D2D] my-3"></div>
+            <div class="text-[10px] text-[#9A9A9A] mb-2 uppercase tracking-wide">Export Preview</div>
+            <p id="included-duration" class="text-xs text-[#3daee9]">0 segments · 0.00s</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT: Main Content (Preview, Waveform, Segment List) -->
+      <div class="flex-1 flex flex-col overflow-hidden">
+
+
+
+        <!-- MIDDLE: Waveform Overview Timeline -->
+        <div class="waveform-panel border-b border-[#2D2D2D]">
+          <div class="waveform-header header-row">
+            <div class="flex items-center gap-4">
+              <span class="text-[10px] text-[#9A9A9A] uppercase tracking-wide">Audio Waveform</span>
+
+              <!-- Transport Controls -->
+              <div class="flex items-center gap-2 border-l border-r border-[#2D2D2D] px-3 mx-2">
+                <button id="prev-segment-btn" class="preview-btn" disabled title="Previous Segment">
+                  <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M11 19l-7-7 7-7m8 14l-7-7 7-7" />
+                  </svg>
+                </button>
+                <button id="play-pause-btn" class="text-white hover:text-blue-500 transition-colors px-2"
+                  disabled>▶</button>
+                <button id="next-segment-btn" class="preview-btn" disabled title="Next Segment">
+                  <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M13 5l7 7-7 7M5 5l7 7-7 7" />
+                  </svg>
+                </button>
+                <div class="flex items-center gap-1 font-mono text-[10px] ml-2">
+                  <span id="current-time" class="text-[#E0E0E0]">00:00.00</span>
+                  <span class="text-[#666]">/</span>
+                  <span id="total-time" class="text-[#9A9A9A]">00:00.00</span>
+                </div>
+              </div>
+
+              <div class="flex items-center gap-2">
+                <button id="zoom-out-btn" class="zoom-btn" title="Zoom Out">−</button>
+                <button id="zoom-in-btn" class="zoom-btn" title="Zoom In">+</button>
+              </div>
+            </div>
+            <div class="waveform-legend">
+              <div class="flex items-center gap-1">
+                <div class="w-2 h-2 rounded-sm" style="background: #007AFF;"></div>
+                <span class="text-[10px] text-[#9A9A9A]">Content</span>
+              </div>
+              <div class="flex items-center gap-1">
+                <div class="w-2 h-2 rounded-sm" style="background: #2a2a2a;"></div>
+                <span class="text-[10px] text-[#9A9A9A]">Silence</span>
+              </div>
+            </div>
+          </div>
+          <div class="waveform-container relative overflow-x-auto overflow-y-hidden custom-scrollbar flex-1 h-full">
+            <canvas id="waveform-canvas" class="waveform-canvas"></canvas>
+            <div id="timeline-tooltip"
+              class="absolute pointer-events-none bg-black/80 text-white text-[10px] px-1.5 py-0.5 rounded opacity-0 transition-opacity z-10 top-2">
+              00:00</div>
+            <div id="waveform-empty" class="waveform-empty">
+              <span class="text-xs text-[#666]">Import video to see waveform</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="resizer" id="resizer-2"></div>
+
+        <!-- BOTTOM: Segment Review List -->
+        <div class="segment-list-panel flex-1 flex flex-col overflow-hidden">
+          <div class="segment-list-header">
+            <span class="text-[10px] text-[#9A9A9A] uppercase tracking-wide">Segments</span>
+            <span id="segment-count" class="text-[10px] text-[#666]">0 segments</span>
+          </div>
+          <div id="segment-list" class="segment-list overflow-y-auto flex-1">
+            <div class="segment-empty">
+              <svg class="w-8 h-8 text-[#444] mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M7 4v16M17 4v16M3 8h4m10 0h4M3 12h18M3 16h4m10 0h4M4 20h16a1 1 0 001-1V5a1 1 0 00-1-1H4a1 1 0 00-1 1v14a1 1 0 001 1z" />
+              </svg>
+              <p class="text-xs text-[#666]">Import video to begin</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Status Bar -->
+        <div id="status-area" class="status-bar">
+          <p class="status-text">Ready</p>
+        </div>
+
+        <!-- Progress Bar -->
+        <div id="progress-container" class="progress-bar" style="display: none;">
+          <span class="progress-label">Exporting</span>
+          <div class="progress-track">
+            <div id="progress-bar-fill" class="progress-fill"></div>
+          </div>
+          <span id="progress-percentage" class="progress-value">0%</span>
+          <span id="progress-time" class="text-[10px] font-mono text-[#9A9A9A]"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>
